@@ -1,0 +1,3 @@
+FROM crpi-y1mch6v3dn8zzsm8.cn-hangzhou.personal.cr.aliyuncs.com/cloudsway/cfs-client:v3.3.2
+RUN apt-get update && \
+    apt-get install -y curl

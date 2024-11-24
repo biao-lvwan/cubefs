@@ -291,6 +291,7 @@ func main() {
 
 	proto.InitBufferPool(buffersTotalLimit)
 	syslog.Printf("Hello, CubeFS Storage\n%s\n", Version)
+	//修改打开文件数，linux使用
 	err = modifyOpenFiles()
 	if err != nil {
 		err = errors.NewErrorf("Fatal: failed to modify open files - %v", err)
