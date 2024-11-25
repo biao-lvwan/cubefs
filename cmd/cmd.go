@@ -106,23 +106,23 @@ func interceptSignal(s common.Server) {
 }
 
 func modifyOpenFiles() (err error) {
-	var rLimit syscall.Rlimit
-	err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
-	if err != nil {
-		return fmt.Errorf("Error Getting Rlimit %v", err.Error())
-	}
-	syslog.Println(rLimit)
-	rLimit.Max = 1024000
-	rLimit.Cur = 1024000
-	err = syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
-	if err != nil {
-		return fmt.Errorf("Error Setting Rlimit %v", err.Error())
-	}
-	err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
-	if err != nil {
-		return fmt.Errorf("Error Getting Rlimit %v", err.Error())
-	}
-	syslog.Println("Rlimit Final", rLimit)
+		var rLimit syscall.Rlimit
+		err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
+		if err != nil {
+			return fmt.Errorf("Error Getting Rlimit %v", err.Error())
+		}
+		syslog.Println(rLimit)
+		rLimit.Max = 1024000
+		rLimit.Cur = 1024000
+		err = syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
+		if err != nil {
+			return fmt.Errorf("Error Setting Rlimit %v", err.Error())
+		}
+		err = syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit)
+		if err != nil {
+			return fmt.Errorf("Error Getting Rlimit %v", err.Error())
+		}
+		syslog.Println("Rlimit Final", rLimit)
 	return
 }
 
