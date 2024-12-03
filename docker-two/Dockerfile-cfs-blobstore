@@ -1,0 +1,1 @@
+FROM cubefs/blobstore:v3.3.2
