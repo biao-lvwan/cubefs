@@ -1,0 +1,36 @@
+FROM ubuntu:24.04 AS base
+
+LABEL maintainer="biao.xu@qq.com"
+
+# 换源
+RUN  echo "deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse" > /etc/apt/sources.list  \
+        && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse" >> /etc/apt/sources.list  \
+        && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse" >> /etc/apt/sources.list # buildkit
+
+RUN  apt-get update
+
+ENV DEBIAN_FRONTEND=noninteractive
+# 适配
+RUN  dpkg --add-architecture i386
+
+RUN apt-get install -y --no-install-recommends \
+    # bind-utils \
+    jq \
+    xfsprogs \
+    fuse \
+    curl \
+    netcat
+
+RUN apt-get clean  \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /cfs/bin /cfs/conf /cfs/logs /cfs/data
+
+FROM base AS server
+COPY build/bin/blobstore /cfs/bin/
+COPY build/bin/cfs-cli /cfs/bin/
+COPY build/bin/cfs-client /cfs/bin/
+COPY docker-two/cli.conf /cfs/bin/cli.conf
+COPY docker-two/cfs-cli.json /cfs/bin/cfs-cli.json
+WORKDIR /cfs
+CMD ["bash", "-c", "trap '' SIGINT; while true; do sleep 1; done"]

@@ -160,7 +160,7 @@ func (a *allocator) allocNodeSet(ctx context.Context, diskType proto.DiskType, m
 	if !mode.T().IsReplicateMode() {
 		nodeSetAllocator, ok := nodeSetAllocators[ecNodeSetID]
 		if !ok || nodeSetAllocator.freeChunk < int64(count) {
-			span.Errorf("can not find nodeset of EC mode, diskType: %s", diskType.String())
+			span.Errorf("can not find nodeset of EC mode,ecNodeSetID: %d,freechunk:%d,count:%d, diskType: %s", ecNodeSetID, nodeSetAllocator.freeChunk, count, diskType.String())
 			return nil, ErrNoEnoughSpace
 		}
 		return nodeSetAllocator, nil
