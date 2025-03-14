@@ -79,12 +79,12 @@ build_zlib() {
     if [ -f "${BuildDependsLibPath}/libz.a" ]; then
         return 0
     fi
-
     if [ ! -d ${BuildOutPath}/zlib-${ZLIB_VER} ]; then
         tar -zxf ${DependsPath}/zlib-${ZLIB_VER}.tar.gz -C ${BuildOutPath}
     fi
 
     echo "build zlib..."
+
     pushd ${BuildOutPath}/zlib-${ZLIB_VER}
     CFLAGS='-fPIC' ./configure --static
     make -j$1
@@ -186,7 +186,8 @@ build_snappy() {
 }
 
 build_rocksdb() {
-    ROCKSDB_VER=6.3.6
+    #ROCKSDB_VER=6.3.6
+    ROCKSDB_VER=8.11.3
     if [ -f "${BuildDependsLibPath}/librocksdb.a" ]; then
         return 0
     fi

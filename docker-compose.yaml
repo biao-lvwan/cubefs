@@ -1,0 +1,9 @@
+version: '3.8'
+# docker-compose -f docker-compose.yaml up -d
+services:
+  cubefs:
+    image: xubiao05/cubefs:1.0
+    container_name: cubefs
+    working_dir: /go/src/github.com/cubefs/cubefs
+    volumes:
+      - .:/go/src/github.com/cubefs/cubefs
