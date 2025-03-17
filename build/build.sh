@@ -186,8 +186,8 @@ build_snappy() {
 }
 
 build_rocksdb() {
-    #ROCKSDB_VER=6.3.6
-    ROCKSDB_VER=8.11.3
+    ROCKSDB_VER=6.3.6
+    #ROCKSDB_VER=8.11.3
     if [ -f "${BuildDependsLibPath}/librocksdb.a" ]; then
         return 0
     fi
@@ -218,6 +218,7 @@ build_rocksdb() {
         exit 1
     fi
     make install-static INSTALL_PATH=${BuildPath}
+    cp /usr/local/lib/librocksdb.a ${BuildDependsLibPath}/librocksdb.a
     strip -S -x ${BuildDependsLibPath}/librocksdb.a
     popd
 }
@@ -312,7 +313,7 @@ build_blobstore() {
 
 build_client() {
     pushd $SrcPath >/dev/null
-    echo -n "build cfs-client   "
+    echo -n "build cfs-client"
     CGO_ENABLED=0 go build ${MODFLAGS} -gcflags=all=-trimpath=${SrcPath} -asmflags=all=-trimpath=${SrcPath} -ldflags="${LDFlags}" -o ${BuildBinPath}/cfs-client ${SrcPath}/client/*.go  && echo "success" || echo "failed"
     popd >/dev/null
 }

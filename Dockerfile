@@ -1,9 +1,14 @@
-FROM ubuntu:24.04
+FROM ubuntu:18.04
 
 # 替换为阿里云 Ubuntu 镜像源
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
-    && sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+RUN  echo "deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse" > /etc/apt/sources.list  \
+        && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse" >> /etc/apt/sources.list  \
+        && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse" >> /etc/apt/sources.list # buildkit
 
+ENV TZ=Asia/Shanghai
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN  dpkg --add-architecture i386
 # 安装构建工具和依赖
 RUN apt-get update && apt-get install -y \
     wget \
@@ -18,12 +23,21 @@ RUN apt-get update && apt-get install -y \
     cmake \
     gcc \
     libsqlite3-dev \
+    openjdk-8-jdk \
     && rm -rf /var/lib/apt/lists/*
 
 # 下载并安装 Go 1.23.1
 RUN wget https://mirrors.aliyun.com/golang/go1.23.1.linux-amd64.tar.gz -O /tmp/go.tar.gz \
     && tar -C /usr/local -xzf /tmp/go.tar.gz \
     && rm /tmp/go.tar.gz
+
+
+# 安装maven
+RUN wget https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz  \
+        && tar -xzvf apache-maven-3.6.3-bin.tar.gz -C /usr/local  \
+        && rm apache-maven-3.6.3-bin.tar.gz  \
+        && ln -s /usr/local/apache-maven-3.6.3/bin/mvn /usr/local/bin/mvn
+
 
 # 设置 Go 环境变量
 ENV PATH="/usr/local/go/bin:${PATH}"
