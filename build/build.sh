@@ -187,6 +187,7 @@ build_snappy() {
 
 build_rocksdb() {
     ROCKSDB_VER=6.3.6
+    #ROCKSDB_VER=6.6.4
     #ROCKSDB_VER=8.11.3
     if [ -f "${BuildDependsLibPath}/librocksdb.a" ]; then
         return 0
